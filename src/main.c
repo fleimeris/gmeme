@@ -1,4 +1,4 @@
-#include <gtk/gtk.h>
+#include "gmeme-image.h"
 
 GdkPixbufAnimation *pixbufAnin;
 
@@ -9,17 +9,14 @@ GtkWidget* load_image(const char *filename)
     return gtk_image_new_from_pixbuf(gdk_pixbuf_animation_get_static_image(pixbufAnin));
 }
 
-static void clicked(GtkButton *btn, GtkWidget *img)
-{
-
-}
-
 static void app_activate(GApplication *app)
 {
     GtkWidget *win;
     GtkWidget *box;
     GtkWidget *img;
     GtkWidget *btn;
+
+    GtkWidget *test = gmeme_image_new_from_filepath("/home/benas/CLionProjects/gmeme/cmake-build-debug/funnyxd.gif");
 
     win = gtk_application_window_new(GTK_APPLICATION(app));
     gtk_window_set_title(GTK_WINDOW(win), "gMeme");
@@ -31,10 +28,10 @@ static void app_activate(GApplication *app)
     img = load_image("/home/benas/CLionProjects/gmeme/cmake-build-debug/funnyxd.gif");
 
     btn = gtk_button_new_with_label("Fetus deletus xd");
-    g_signal_connect(btn, "clicked", G_CALLBACK(clicked), img);
 
     gtk_box_append(GTK_BOX(box), img);
     gtk_box_append(GTK_BOX(box), btn);
+    gtk_box_append(GTK_BOX(box), gmeme_image_get_image(test));
 
     gtk_window_set_child(GTK_WINDOW(win), box);
 
@@ -43,7 +40,7 @@ static void app_activate(GApplication *app)
 
 int main(int argc, char **argv)
 {
-/*    GtkApplication *app;
+    GtkApplication *app;
     int stat;
 
     app = gtk_application_new("com.github.fleimeris.gmeme", G_APPLICATION_DEFAULT_FLAGS);
@@ -51,5 +48,5 @@ int main(int argc, char **argv)
     stat = g_application_run(G_APPLICATION(app), argc, argv);
     g_object_unref(app);
 
-    return stat;*/
+    return stat;
 }
