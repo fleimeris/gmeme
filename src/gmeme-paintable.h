@@ -9,7 +9,10 @@
 
 G_BEGIN_DECLS
 
-#define GMEME
+#define GMEME_TYPE_PAINTABLE (gmeme_paintable_get_type())
+G_DECLARE_FINAL_TYPE(GMemePaintable, gmeme_paintable, GMEME, PAINTABLE, GObject)
+
+GdkPaintable *gmeme_paintable_new_from_filepath(const char *filePath);
 
 G_END_DECLS
 

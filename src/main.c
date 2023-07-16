@@ -1,4 +1,5 @@
 #include "gmeme-image.h"
+#include "gmeme-paintable.h"
 
 GdkPixbufAnimation *pixbufAnin;
 
@@ -17,6 +18,11 @@ static void app_activate(GApplication *app)
     GtkWidget *btn;
 
     GtkWidget *test = gmeme_image_new_from_filepath("/home/benas/CLionProjects/gmeme/cmake-build-debug/funnyxd.gif");
+    GdkPaintable *pPaintable = gmeme_paintable_new_from_filepath("/home/benas/CLionProjects/gmeme/cmake-build-debug/funnyxd.gif");
+    GtkWidget *paintableImage = gtk_image_new_from_paintable(pPaintable);
+
+    GdkPaintable *pStatic = gmeme_paintable_new_from_filepath("/home/benas/CLionProjects/gmeme/cmake-build-debug/hello.jpg");
+    GtkWidget *staticImage = gtk_image_new_from_paintable(pStatic);
 
     win = gtk_application_window_new(GTK_APPLICATION(app));
     gtk_window_set_title(GTK_WINDOW(win), "gMeme");
@@ -31,7 +37,8 @@ static void app_activate(GApplication *app)
 
     gtk_box_append(GTK_BOX(box), img);
     gtk_box_append(GTK_BOX(box), btn);
-    gtk_box_append(GTK_BOX(box), gmeme_image_get_image(test));
+    gtk_box_append(GTK_BOX(box), staticImage);
+    gtk_box_append(GTK_BOX(box), paintableImage);
 
     gtk_window_set_child(GTK_WINDOW(win), box);
 

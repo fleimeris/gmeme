@@ -53,8 +53,6 @@ GtkWidget *gmeme_image_new_from_filepath(const char* filename)
     GdkPixbufAnimationIter *p_pixbufAnimIter = gdk_pixbuf_animation_get_iter(p_pixbufAnim, NULL);
     GtkWidget *p_image = gtk_image_new_from_pixbuf(gdk_pixbuf_animation_iter_get_pixbuf(p_pixbufAnimIter));
 
-    g_timeout_add()
-
     p_gmemeImage->p_image = p_image;
     p_gmemeImage->p_pixbufAnim = p_pixbufAnim;
 }
