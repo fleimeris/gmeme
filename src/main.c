@@ -1,23 +1,10 @@
-#include "gmeme-image.h"
 #include "gmeme-paintable.h"
-
-GdkPixbufAnimation *pixbufAnin;
-
-GtkWidget* load_image(const char *filename)
-{
-    pixbufAnin = gdk_pixbuf_animation_new_from_file(filename, NULL);
-
-    return gtk_image_new_from_pixbuf(gdk_pixbuf_animation_get_static_image(pixbufAnin));
-}
 
 static void app_activate(GApplication *app)
 {
     GtkWidget *win;
     GtkWidget *box;
-    GtkWidget *img;
-    GtkWidget *btn;
 
-    GtkWidget *test = gmeme_image_new_from_filepath("/home/benas/CLionProjects/gmeme/cmake-build-debug/funnyxd.gif");
     GdkPaintable *pPaintable = gmeme_paintable_new_from_filepath("/home/benas/CLionProjects/gmeme/cmake-build-debug/funnyxd.gif");
     GtkWidget *paintableImage = gtk_image_new_from_paintable(pPaintable);
 
@@ -31,12 +18,6 @@ static void app_activate(GApplication *app)
     box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 5);
     gtk_box_set_homogeneous(GTK_BOX(box), TRUE);
 
-    img = load_image("/home/benas/CLionProjects/gmeme/cmake-build-debug/funnyxd.gif");
-
-    btn = gtk_button_new_with_label("Fetus deletus xd");
-
-    gtk_box_append(GTK_BOX(box), img);
-    gtk_box_append(GTK_BOX(box), btn);
     gtk_box_append(GTK_BOX(box), staticImage);
     gtk_box_append(GTK_BOX(box), paintableImage);
 
