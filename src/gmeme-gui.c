@@ -2,7 +2,7 @@
 // Created by benas on 7/16/23.
 //
 
-#include "gui.h"
+#include "gmeme-gui.h"
 #include "gmeme-paintable.h"
 
 static void app_activate(GApplication *app)
