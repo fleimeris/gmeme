@@ -3,26 +3,69 @@
 //
 
 #include "gmeme-app-data.h"
-#include <glib.h>
 #include <glib/gstdio.h>
 #include <sqlite3.h>
 
 gchar* configFilePath;
 sqlite3 *db;
 
+GalleryImages *meme_app_data_get_all_images(void)
+{
+    const gchar *getAllImages = "select \"Id\", \"Title\", \"AbsolutePath\", \"Keywords\""
+                                "from images";
+    sqlite3_stmt *stmt;
+
+    if(sqlite3_prepare_v2(db, getAllImages, -1, &stmt, 0) != SQLITE_OK)
+    {
+        g_print("Failed to prepare statement: %s\n", sqlite3_errmsg(db));
+        return NULL;
+    }
+
+    int allocRows = 10;
+
+    GalleryImages *result = g_malloc(sizeof(GalleryImages));
+    result->count = 0;
+    result->images = g_malloc(allocRows * sizeof(Image));
+
+    while(sqlite3_step(stmt) == SQLITE_ROW)
+    {
+        if(result->count >= allocRows)
+        {
+            allocRows += 3;
+            result->images = g_realloc(result->images, allocRows * sizeof(Image));
+        }
+
+        result->images[result->count].id = sqlite3_column_int(stmt, 0);
+        result->images[result->count].title = g_strdup((char*)sqlite3_column_text(stmt, 1));
+        result->images[result->count].absolutePath = g_strdup((char*)sqlite3_column_text(stmt, 2));
+        result->images[result->count].keyword = g_strdup((char*)sqlite3_column_text(stmt, 3));
+
+        result->count++;
+    }
+
+    sqlite3_finalize(stmt);
+
+    return result;
+}
+
 void apply_migrations(void)
 {
     gchar *errMsg = 0;
-    const gchar *createMetadataSql = "CREATE TABLE metadata"
+    const gchar *createMetadataTable = "CREATE TABLE IF NOT EXISTS metadata"
                                      "(db_schema_version TEXT);";
-
-    sqlite3_exec(db, createMetadataSql, 0, 0, &errMsg);
+    sqlite3_exec(db, createMetadataTable, 0, 0, &errMsg);
 
     const char *insertSchemaVersion = "INSERT INTO metadata"
                                       "(db_schema_version)"
                                       "VALUES ('1.0')";
-
     sqlite3_exec(db, insertSchemaVersion, 0, 0, &errMsg);
+
+    const char *insertImagesTable = "CREATE TABLE IF NOT EXISTS images "
+                                    "(Id INTEGER PRIMARY KEY AUTOINCREMENT,"
+                                    "Title TEXT,"
+                                    "AbsolutePath INTEGER,"
+                                    "Keywords TEXT);";
+    sqlite3_exec(db, insertImagesTable, 0, 0, &errMsg);
 }
 
 int create_db(gboolean applyMigrations)
@@ -81,4 +124,16 @@ void gmeme_app_data_dispose(void)
 {
     g_free(configFilePath);
     sqlite3_close(db);
+}
+
+void meme_app_data_gallery_images_dispose(GalleryImages *galleryImages)
+{
+    for(size_t i = 0; i < galleryImages->count; i++)
+    {
+        g_free(galleryImages->images[i].title);
+        g_free(galleryImages->images[i].absolutePath);
+        g_free(galleryImages->images[i].keyword);
+    }
+
+    g_free(galleryImages);
 }
