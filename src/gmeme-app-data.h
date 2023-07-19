@@ -24,7 +24,8 @@ struct GalleryImages
 int gmeme_app_data_init(void);
 void gmeme_app_data_dispose(void);
 
-GalleryImages *meme_app_data_get_all_images(void);
-void meme_app_data_gallery_images_dispose(GalleryImages *galleryImages);
+GalleryImages *gmeme_app_data_get_all_images(void);
+void gmeme_app_data_gallery_images_dispose(GalleryImages *galleryImages);
+void gmeme_app_data_gallery_images_dispose_safe(GalleryImages *galleryImages);
 
 #endif //GMEME_GMEME_APP_DATA_H

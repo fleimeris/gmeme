@@ -9,7 +9,7 @@
 gchar* configFilePath;
 sqlite3 *db;
 
-GalleryImages *meme_app_data_get_all_images(void)
+GalleryImages *gmeme_app_data_get_all_images(void)
 {
     const gchar *getAllImages = "select \"Id\", \"Title\", \"AbsolutePath\", \"Keywords\""
                                 "from images";
@@ -126,7 +126,7 @@ void gmeme_app_data_dispose(void)
     sqlite3_close(db);
 }
 
-void meme_app_data_gallery_images_dispose(GalleryImages *galleryImages)
+void gmeme_app_data_gallery_images_dispose(GalleryImages *galleryImages)
 {
     for(size_t i = 0; i < galleryImages->count; i++)
     {
@@ -135,5 +135,12 @@ void meme_app_data_gallery_images_dispose(GalleryImages *galleryImages)
         g_free(galleryImages->images[i].keyword);
     }
 
+    g_free(galleryImages->images);
+    g_free(galleryImages);
+}
+
+void gmeme_app_data_gallery_images_dispose_safe(GalleryImages *galleryImages)
+{
+    g_free(galleryImages->images);
     g_free(galleryImages);
 }

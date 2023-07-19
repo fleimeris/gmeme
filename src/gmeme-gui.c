@@ -4,17 +4,16 @@
 
 #include "gmeme-gui.h"
 #include "gmeme-paintable.h"
+#include "gmeme-app-data.h"
+
+GuiMeme *memes;
 
 static void app_activate(GApplication *app)
 {
     GtkWidget *win;
     GtkWidget *box;
 
-    GdkPaintable *pPaintable = gmeme_paintable_new_from_filepath("/home/benas/CLionProjects/gmeme/cmake-build-debug/funnyxd.gif");
-    GtkWidget *paintableImage = gtk_image_new_from_paintable(pPaintable);
-
-    GdkPaintable *pStatic = gmeme_paintable_new_from_filepath("/home/benas/CLionProjects/gmeme/cmake-build-debug/hello.jpg");
-    GtkWidget *staticImage = gtk_image_new_from_paintable(pStatic);
+    GalleryImages *images = gmeme_app_data_get_all_images();
 
     win = gtk_application_window_new(GTK_APPLICATION(app));
     gtk_window_set_title(GTK_WINDOW(win), "gMeme");
@@ -23,15 +22,24 @@ static void app_activate(GApplication *app)
     box = gtk_box_new(GTK_ORIENTATION_VERTICAL, 5);
     gtk_box_set_homogeneous(GTK_BOX(box), TRUE);
 
-    gtk_box_append(GTK_BOX(box), staticImage);
-    gtk_box_append(GTK_BOX(box), paintableImage);
+    memes = g_malloc(images->count * sizeof(GuiMeme));
+
+    for(size_t i = 0; i < images->count; i++)
+    {
+        memes[i].image = &images->images[i];
+        memes[i].gMemePaintable = gmeme_paintable_new_from_filepath(memes->image[i].absolutePath);
+        memes[i].gImage = gtk_image_new_from_paintable(memes[i].gMemePaintable);
+        gtk_box_append(GTK_BOX(box), memes[i].gImage);
+    }
+
+    gmeme_app_data_gallery_images_dispose_safe(images);
 
     gtk_window_set_child(GTK_WINDOW(win), box);
 
     gtk_window_present(GTK_WINDOW(win));
 }
 
-int run_gui(int argc, char **argv)
+int gmeme_gui_run(int argc, char **argv)
 {
     GtkApplication *app;
     int stat;
