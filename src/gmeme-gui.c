@@ -8,10 +8,16 @@
 
 GuiMeme *memes;
 
+static void clicked(GtkButton* self)
+{
+    gmeme_app_data_insert_image("test", "test", "test");
+}
+
 static void app_activate(GApplication *app)
 {
     GtkWidget *win;
     GtkWidget *box;
+    GtkWidget *btn;
 
     GalleryImages *images = gmeme_app_data_get_all_images();
 
@@ -33,6 +39,10 @@ static void app_activate(GApplication *app)
     }
 
     gmeme_app_data_gallery_images_dispose_safe(images);
+
+    btn = gtk_button_new_with_label("Test insert");
+    g_signal_connect(btn, "clicked", G_CALLBACK(clicked), NULL);
+    gtk_box_append(GTK_BOX(box), btn);
 
     gtk_window_set_child(GTK_WINDOW(win), box);
 

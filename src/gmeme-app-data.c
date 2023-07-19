@@ -9,6 +9,34 @@
 gchar* configFilePath;
 sqlite3 *db;
 
+gboolean gmeme_app_data_insert_image(gchar *title, gchar *filePath, gchar *keyword)
+{
+    const gchar *insertImage = "INSERT INTO images (\"Title\", \"AbsolutePath\", \"Keywords\") "
+                               "VALUES (?, ?, ?)";
+    sqlite3_stmt *stmt;
+
+    if(sqlite3_prepare_v2(db, insertImage, -1, &stmt, 0) != SQLITE_OK)
+    {
+        g_print("Failed to prepare statement: %s\n", sqlite3_errmsg(db));
+        return FALSE;
+    }
+
+    sqlite3_bind_text(stmt, 1, title, -1, NULL);
+    sqlite3_bind_text(stmt, 2, filePath, -1, NULL);
+    sqlite3_bind_text(stmt, 3, keyword, -1, NULL);
+
+    if(sqlite3_step(stmt) != SQLITE_DONE)
+    {
+        g_print("Failed to step: %s\n", sqlite3_errmsg(db));
+        sqlite3_finalize(stmt);
+        return FALSE;
+    }
+
+    sqlite3_finalize(stmt);
+
+    return TRUE;
+}
+
 GalleryImages *gmeme_app_data_get_all_images(void)
 {
     const gchar *getAllImages = "select \"Id\", \"Title\", \"AbsolutePath\", \"Keywords\""
@@ -38,7 +66,7 @@ GalleryImages *gmeme_app_data_get_all_images(void)
         result->images[result->count].id = sqlite3_column_int(stmt, 0);
         result->images[result->count].title = g_strdup((char*)sqlite3_column_text(stmt, 1));
         result->images[result->count].absolutePath = g_strdup((char*)sqlite3_column_text(stmt, 2));
-        result->images[result->count].keyword = g_strdup((char*)sqlite3_column_text(stmt, 3));
+        result->images[result->count].keywords = g_strdup((char*)sqlite3_column_text(stmt, 3));
 
         result->count++;
     }
@@ -132,7 +160,7 @@ void gmeme_app_data_gallery_images_dispose(GalleryImages *galleryImages)
     {
         g_free(galleryImages->images[i].title);
         g_free(galleryImages->images[i].absolutePath);
-        g_free(galleryImages->images[i].keyword);
+        g_free(galleryImages->images[i].keywords);
     }
 
     g_free(galleryImages->images);

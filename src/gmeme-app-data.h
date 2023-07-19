@@ -12,7 +12,7 @@ struct Image
     guint id;
     gchar *title;
     gchar *absolutePath;
-    gchar *keyword;
+    gchar *keywords;
 } typedef Image;
 
 struct GalleryImages
@@ -24,6 +24,7 @@ struct GalleryImages
 int gmeme_app_data_init(void);
 void gmeme_app_data_dispose(void);
 
+gboolean gmeme_app_data_insert_image(gchar *title, gchar *filePath, gchar *keyword);
 GalleryImages *gmeme_app_data_get_all_images(void);
 void gmeme_app_data_gallery_images_dispose(GalleryImages *galleryImages);
 void gmeme_app_data_gallery_images_dispose_safe(GalleryImages *galleryImages);
