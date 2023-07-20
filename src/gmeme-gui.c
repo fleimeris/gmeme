@@ -1,7 +1,6 @@
 //
 // Created by benas on 7/16/23.
 //
-
 #include "gmeme-gui.h"
 #include "gmeme-paintable.h"
 #include "gmeme-app-data.h"
@@ -30,13 +29,13 @@ static void app_activate(GApplication *app)
 
     memes = g_malloc(images->count * sizeof(GuiMeme));
 
-    for(size_t i = 0; i < images->count; i++)
+/*    for(size_t i = 0; i < images->count; i++)
     {
         memes[i].image = &images->images[i];
         memes[i].gMemePaintable = gmeme_paintable_new_from_filepath(memes->image[i].absolutePath);
         memes[i].gImage = gtk_image_new_from_paintable(memes[i].gMemePaintable);
         gtk_box_append(GTK_BOX(box), memes[i].gImage);
-    }
+    }*/
 
     gmeme_app_data_gallery_images_dispose_safe(images);
 
@@ -47,6 +46,10 @@ static void app_activate(GApplication *app)
     gtk_window_set_child(GTK_WINDOW(win), box);
 
     gtk_window_present(GTK_WINDOW(win));
+
+    GtkBuilder *builder = gtk_builder_new_from_resource("/org/github/fleimeris/gmeme/ui/gmeme-main.ui");
+    GtkWidget *window = GTK_WIDGET(gtk_builder_get_object(builder, "win"));
+    g_print("Window title: %s\n", gtk_window_get_title(GTK_WINDOW(window)));
 }
 
 int gmeme_gui_run(int argc, char **argv)
