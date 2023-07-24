@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<gresources>
+    <gresource prefix="/org/github/fleimeris/gmeme">
+        <file>ui/gmeme-main.ui</file>
+    </gresource>
+</gresources>
