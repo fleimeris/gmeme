@@ -7,9 +7,27 @@
 
 GuiMeme *memes;
 
+int nPresses = 0;
+
+void stopped(GtkGestureClick* self, GuiMeme *meme)
+{
+    if(nPresses == 1)
+    {
+        //TODO: copy image to clipboard
+        g_print("%s\n", "//TODO: copy image to clipboard");
+    }
+    else if(nPresses == 2)
+    {
+        //TODO: open dialog
+        g_print("%s\n", "//TODO: open dialog");
+    }
+
+    nPresses = 0;
+}
+
 void released(GtkGestureClick* self, gint n_press, gdouble x, gdouble y, GuiMeme *meme)
 {
-    g_print("%s\n", meme->image->title);
+    nPresses = n_press;
 }
 
 static void app_activate(GApplication *app)
@@ -31,6 +49,7 @@ static void app_activate(GApplication *app)
 
         GtkGesture *gestureClick = gtk_gesture_click_new();
         g_signal_connect(gestureClick, "released", G_CALLBACK(released), &memes[i]);
+        g_signal_connect(gestureClick, "stopped", G_CALLBACK(stopped), &memes[i]);
         memes[i].gImage = gtk_image_new_from_paintable(memes[i].gMemePaintable);
         gtk_widget_set_receives_default(memes[i].gImage, TRUE);
         gtk_widget_add_controller(memes[i].gImage, GTK_EVENT_CONTROLLER(gestureClick));
