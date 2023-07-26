@@ -13,6 +13,7 @@ G_BEGIN_DECLS
 G_DECLARE_FINAL_TYPE(GMemePaintable, gmeme_paintable, GMEME, PAINTABLE, GObject)
 
 GdkPaintable *gmeme_paintable_new_from_filepath(const char *filePath);
+gboolean gmeme_paintable_is_static(GdkPaintable *paintable);
 
 G_END_DECLS
 

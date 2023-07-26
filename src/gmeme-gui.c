@@ -4,6 +4,7 @@
 #include "gmeme-gui.h"
 #include "gmeme-paintable.h"
 #include "gmeme-app-data.h"
+#include "gmeme-utils.h"
 
 GuiMeme *memes;
 
@@ -12,10 +13,10 @@ int nPresses = 0;
 void stopped(GtkGestureClick* self, GuiMeme *meme)
 {
     if(nPresses == 1)
-    {
-        //TODO: copy image to clipboard
-        g_print("%s\n", "//TODO: copy image to clipboard");
-    }
+        if(gmeme_paintable_is_static(meme->gMemePaintable))
+            gmeme_utils_open_file_manager(meme->image->absolutePath);
+        else
+            gmeme_utils_copy_image_to_clipboard(meme->image->absolutePath);
     else if(nPresses == 2)
     {
         //TODO: open dialog
