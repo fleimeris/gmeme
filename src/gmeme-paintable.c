@@ -119,3 +119,10 @@ GdkPaintable *gmeme_paintable_new_from_filepath(const char *filePath)
 
     return GDK_PAINTABLE(self);
 }
+
+gboolean gmeme_paintable_is_static(GdkPaintable *paintable)
+{
+    GMemePaintable *self = GMEME_PAINTABLE(paintable);
+
+    return self->isStatic;
+}

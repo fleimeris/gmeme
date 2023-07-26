@@ -1,6 +1,5 @@
 #include "gmeme-gui.h"
 
-
 int main(int argc, char **argv)
 {
     gmeme_app_data_init();
