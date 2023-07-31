@@ -22,6 +22,8 @@ add_executable(${PROJECT_NAME} src/main.c
         ${GRESOURCE_C}
         src/gmeme-utils.c
         src/gmeme-utils.h
+        src/gmeme-info-dialog.c
+        src/gmeme-info-dialog.h
 )
 
 target_link_libraries(${PROJECT_NAME} PRIVATE PkgConfig::GTK4 sqlite3)

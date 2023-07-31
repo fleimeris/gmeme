@@ -2,5 +2,6 @@
 <gresources>
     <gresource prefix="/org/github/fleimeris/gmeme">
         <file>ui/gmeme-main.ui</file>
+        <file>ui/gmeme-info-dialog.ui</file>
     </gresource>
 </gresources>

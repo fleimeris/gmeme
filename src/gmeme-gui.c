@@ -5,6 +5,7 @@
 #include "gmeme-paintable.h"
 #include "gmeme-app-data.h"
 #include "gmeme-utils.h"
+#include "gmeme-info-dialog.h"
 
 GuiMeme *memes;
 
